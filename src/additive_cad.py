@@ -1,16 +1,22 @@
-from typing import Literal, Any, Tuple, Union
+"""
+The additive_cad module: includes the AdditiveCad class which allows simple llm inference with
+original CAD as well as other decoding strategies.
+"""
+
+from typing import Literal, Any, Tuple, Union, List
 import torch
 from transformers import LlamaForCausalLM, LlamaTokenizer, PreTrainedTokenizer, PreTrainedModel
 from transformers.generation.utils import ModelOutput
-
+from src.experiment_types import ExperimentConfig
 
 class AdditiveCad:
     """
     Sets up an LLM that we can do inference on.
     """
-    def __init__(self, model_name: str, device: Literal['cpu', 'cuda']):
-        self.model_name: str = model_name
-        self.device: Literal['cpu', 'cuda'] = device
+    def __init__(self, config: ExperimentConfig):
+        self.config: ExperimentConfig = config
+        self.model_name: str = config.llm_name
+        self.device: Literal['cpu', 'cuda'] = config.device
         self.tokenizer: PreTrainedTokenizer = LlamaTokenizer.from_pretrained(self.model_name)
         self.model: PreTrainedModel = LlamaForCausalLM.from_pretrained(
             pretrained_model_name_or_path=self.model_name,
