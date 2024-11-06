@@ -3,11 +3,14 @@ The additive_cad module: includes the AdditiveCad class which allows simple llm 
 original CAD as well as other decoding strategies.
 """
 
-from typing import Literal, Any, Tuple, Union, List
+from typing import Literal, Any, Tuple, Union, List, Dict
+import json
+import time
 import torch
 from transformers import LlamaForCausalLM, LlamaTokenizer, PreTrainedTokenizer, PreTrainedModel
 from transformers.generation.utils import ModelOutput
 from src.experiment_types import ExperimentConfig
+from src.utils import normalize_answer, evaluate_recall
 
 class AdditiveCad:
     """
@@ -24,10 +27,10 @@ class AdditiveCad:
             device_map='auto',
         )
 
-    def generate_token(
+    def generate_distribution(
             self,
             input_text: str,
-            dola_layers: Union[Literal['high', 'low'], None] = None,
+            dola_layers: Literal['high', 'low', 'none'] = 'none',
         ) -> Union[torch.FloatTensor, None]:
         """
         Generate a single token either with DoLa, depending on whether `dola_layers` is set to the
@@ -41,7 +44,7 @@ class AdditiveCad:
             output_scores=True,
             return_dict_in_generate=True,
             output_hidden_states=False,
-            dola_layers=dola_layers,
+            dola_layers=None if dola_layers == 'none' else dola_layers,
             max_new_tokens=1,
             min_new_tokens=1,
         )
@@ -52,17 +55,18 @@ class AdditiveCad:
                 return outputs.scores[0]
         return None
 
-    def contrastive_decoding(
+    def cad_decoding(
             self,
             bad_distribution: torch.Tensor,
             good_distribution: torch.Tensor,
-            alpha: float = 0.1,
             beta: float = 1.0,
         ) -> int:
         """
         Take 2 distributions, do contrastive decoding with adaptive plausibility constraint
         then return the token id with highest logit. Alpha and beta default to literature values.
         """
+        apc = self.config.apc
+
         # Replace -inf with -1000 and inf with 1000
         # good and bad distributions are of shape (1, 32000)
         bad_distribution = torch.where(bad_distribution == float('-inf'), torch.tensor(-1000.0), bad_distribution)
@@ -71,7 +75,7 @@ class AdditiveCad:
         good_distribution = torch.where(good_distribution == float('inf'), torch.tensor(1000.0), good_distribution)
 
         good_probs = torch.softmax(good_distribution, dim=-1)
-        thresh = alpha * float(torch.max(good_probs).item())
+        thresh = apc * float(torch.max(good_probs).item())
         plausible_ids = (good_probs > thresh).nonzero(as_tuple=True)[-1]
 
         max_logit = float('-inf')
@@ -88,7 +92,7 @@ class AdditiveCad:
             return can_id
         return -1
     
-    def contrastive_decoding_novel(
+    def add_cad_decoding(
             self,
             bad_distribution: torch.Tensor,
             good_distribution: torch.Tensor,
@@ -115,96 +119,56 @@ class AdditiveCad:
             return int(max_index)
         return -1
 
-    def cad_generate_memotrap(
-            self,
-            context: str,
-            prompt: str,
-            dola_layers_good: Union[Literal['high', 'low'], None] = None,
-            dola_layers_bad: Union[Literal['high', 'low'], None] = None,
-            alpha: float = 0.1,
-            beta: float = 1.0,
-            gamma: Union[float, None] = None,
-            max_tokens: int = 20,
-        ) -> Union[str, None]:
-        """
-        Given an input context and prompt, return the CAD-generated response
-        """
-
-        for _ in range(max_tokens):
-            good_dis = self.generate_token(
-                input_text=context + ": " + prompt,
-                dola_layers=dola_layers_good
-            )
-            bad_dis = self.generate_token(
-                input_text=prompt,
-                dola_layers=dola_layers_bad
-            )
-            if good_dis is not None and bad_dis is not None:
-                if gamma is None:
-                    next_token_id = self.contrastive_decoding(
-                        bad_distribution=bad_dis,
-                        good_distribution=good_dis,
-                        alpha=alpha,
-                        beta=beta,
-                    )
-                elif gamma is not None:
-                    next_token_id = self.contrastive_decoding_novel(
-                        bad_distribution=bad_dis,
-                        good_distribution=good_dis,
-                        gamma=gamma
-                    )
-                if next_token_id == -1:
-                    raise TypeError("contrastive_decoding failed to return correct id")
-                prompt = self.tokenizer.decode(self.tokenizer.encode(prompt) + [next_token_id], skip_special_tokens=True)
-
-                if self.tokenizer.decode(next_token_id) == ".":
-                    break  # Stop generating after the sentence is ended
-            else: raise  
-        return context + ": " + prompt  # Assuming the space was taken out before context and prompt passed in
-
-    def cad_generate_nq(
+    def generate_response(
             self,
             context: str,
             question: str,
-            dola_layers_good: Union[Literal['high', 'low'], None] = None,
-            dola_layers_bad: Union[Literal['high', 'low'], None] = None,
-            alpha: float = 0.1,
-            beta: float = 1.0,
-            gamma: Union[float, None] = None,
-            max_tokens: int = 20,
+            coeff: float
         ) -> Union[str, None]:
         """
-        Given an input context and prompt, return the CAD-generated response
+        Return the generated response given a question and context, based on the settings of the
+        object config.
+
+        Args:
+            context (str):
+                The context to be placed in the `{context}` formatter of the prompts of the config file.
+            question (str):
+                The question to be placed in the `{question}` formatter of the prompts of the config file.
+            coeff (float):
+                The coefficient required for the configured contrastive decoding type.
+
+        Returns:
+            The LLM's response to a question. Returns `str` type if successful, or `None` if an error occured.
         """
-        sys_prompt_context: str = "Instruction: read the given information and answer the corresponding question.\n\n"
-        sys_prompt_no_context: str = "Instruction: answer the corresponding question.\n\n"
         output: str = " "
 
-        for _ in range(max_tokens):
-            good_dis = self.generate_token(
-                input_text=sys_prompt_context + context + "\nQ: " + question + "\nA:" + output,
-                dola_layers=dola_layers_good
+        for token_number in range(self.config.max_tokens):
+            good_distribution = self.generate_distribution(
+                input_text=self.config.context_prompt.format(context=context, question=question) + output,
+                dola_layers=self.config.dola_layers_context
             )
-            bad_dis = self.generate_token(
-                input_text=sys_prompt_no_context + "Q: " + question + "\nA:" + output,
-                dola_layers=dola_layers_bad
+            bad_distribution = self.generate_distribution(
+                input_text=self.config.no_context_prompt.format(question=question) + output,
+                dola_layers=self.config.dola_layers_no_context
             )
-            if good_dis is not None and bad_dis is not None:
-                if gamma is None:
-                    next_token_id = self.contrastive_decoding(
-                        bad_distribution=bad_dis,
-                        good_distribution=good_dis,
-                        alpha=alpha,
-                        beta=beta,
+            if good_distribution is not None and bad_distribution is not None:
+                if self.config.decoding_strategy == 'CAD':
+                    next_token_id = self.cad_decoding(
+                        bad_distribution=bad_distribution,
+                        good_distribution=good_distribution,
+                        beta=coeff,
                     )
-                elif gamma is not None:
-                    next_token_id = self.contrastive_decoding_novel(
-                        bad_distribution=bad_dis,
-                        good_distribution=good_dis,
-                        gamma=gamma
+                elif self.config.decoding_strategy == 'additive-CAD':
+                    next_token_id = self.add_cad_decoding(
+                        bad_distribution=bad_distribution,
+                        good_distribution=good_distribution,
+                        gamma=coeff
                     )
+                else:
+                    return None
                 if next_token_id == -1:
-                    raise TypeError("contrastive_decoding failed to return correct id")
+                    raise TypeError("cad_decoding failed to return correct id")
+                
                 output = self.tokenizer.decode(self.tokenizer.encode(output) + [next_token_id], skip_special_tokens=True)
 
                 # stopping_symbols = [".", "\n"]
@@ -214,3 +178,60 @@ class AdditiveCad:
             else:
                 return None
         return output  # Assuming the space was taken out before context and prompt passed in
+
+    def generate_results(self) -> Any:
+        "Generate a set of results"
+
+        max_time: float = 7*3600
+        
+        with open(self.config.dataset_path, 'r') as file:
+            data: List[Any] = json.load(file)
+
+        time_0 = time.time()
+
+        results: Dict[str, int] = {}
+
+        for coeff in self.config.test_coefficients:
+            time_1 = time.time()
+
+            score: int = 0
+            for idx, qa in enumerate(data):
+                context: str = qa["context"]
+                question: str = qa["question"]
+                answers: List[str] = qa["answer"]  # There may be multiple answers
+
+                response = self.generate_response(
+                    context=context,
+                    question=question,
+                    coeff=coeff
+                )
+
+                if response == None:
+                    return None  # Error with CAD generation
+                response = normalize_answer(response)
+
+                if time.time() - time_0 >= max_time:
+                    print("Time up!")
+                    return score
+
+                if idx % 100 == 0:
+                    print(f"{idx}. CAD answer: {repr(response)}")
+                    print(f"{idx}. Correct answers:", " ".join([repr(normalize_answer(answers[i])) for i in range(len(answers))]))
+                    print("Time:", time.time() - time_0)
+                if evaluate_recall(response, answers):
+                    score += 1
+            print(f"RESULT: CAD with coefficient={beta}, dola-good set to {dola_layers_good}, dola-bad set to {dola_layers_bad}, model {llm.model_name}, we achieved a score of {score}/{len(data)}")
+
+
+            results[str(coeff)] = score
+            ex_time = time.time() - time_1
+            tot_time = time.time() - time_0
+            print(f"Evaluation time for beta={beta}: {ex_time:.4f}s")
+            if tot_time >= max_time:
+                print("7 hrs up")
+                break
+
+        print("Final results:", results)
+        with open(f'nq_cad_dola_{str(dola_layers_good)}_{str(dola_layers_bad)}.json', 'w') as json_file:
+            json.dump(results, json_file)
+            print("Successfully finished the experiment")
