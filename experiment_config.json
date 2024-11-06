@@ -6,6 +6,8 @@
     "decoding_strategy": "CAD",
     "test_coefficients": [-1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
     "apc": 0,
+    "dola_layers_context": "none",
+    "dola_layers_no_context": "none",
     "max_tokens": 15,
     "dataset_path": "nq/orig_dev_filtered.json"
 }

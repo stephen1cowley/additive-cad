@@ -20,6 +20,8 @@ class ExperimentConfig:
         decoding_strategy (Literal['CAD', 'additive-CAD']): The decoding strategy to use. Must be either 'CAD' or 'additive-CAD'.
         test_coefficients (List[float]): The primary coefficients to test. These should match the hyperparameter of the selected decoding strategy.
         apc (float): The adaptive plausibility constraint (APC) to use. This rejects all tokens less than this proportion of the probability of the maximum token of the distribution with context. Set to `0` for no APC.
+        dola_layers_context (Literal['high', 'low', 'none']): The DoLa layers setting for the distribution with context. Set to `'none'` for no DoLa on this distribution.
+        dola_layers_no_context (Literal['high', 'low', 'none']): The DoLa layers setting for the distribution with no context. Set to `'none'` for no DoLa on this distribution.
         max_tokens (int): After how many tokens to stop generating any more output (to save on compute).
         dataset_path (str): The file path location of the JSON question-answer dataset.
     """
@@ -30,6 +32,8 @@ class ExperimentConfig:
     decoding_strategy: Literal['CAD', 'additive-CAD']
     test_coefficients: List[float]
     apc: float
+    dola_layers_context: Literal['high', 'low', 'none']
+    dola_layers_no_context: Literal['high', 'low', 'none']
     max_tokens: int
     dataset_path: str
 
