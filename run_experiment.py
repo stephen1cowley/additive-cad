@@ -2,19 +2,18 @@
 The run_experiment module: uses the config file to run the experiment.
 """
 
-import os
 import json
+import argparse
 from src.additive_cad import AdditiveCad
 from src.experiment_types import ExperimentConfig
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", type=str, default="experiment_config/local_testing_conf.json")
+    args = parser.parse_args()
 
-    directory = 'experiment_config'
-    file_names = os.listdir(directory)
-    file_names = [f for f in file_names if os.path.isfile(os.path.join(directory, f))]
-
-    # Take the first file in the /experiment_config directory as the config file
-    with open(os.path.join(directory, file_names[0]), "r") as f:
+    # Take the parsed config file location and load the json
+    with open(args.config, "r") as f:
         config_data = json.load(f)
 
     config = ExperimentConfig.from_dict(config_data)
