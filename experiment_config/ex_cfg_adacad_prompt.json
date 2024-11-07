@@ -1,0 +1,15 @@
+{
+    "llm_name": "huggyllama/llama-7b",
+    "device": "cuda",
+    "context_prompt": "{context}\nUsing only the references listed above, answer the following question:\nQuestion: {question}.\nAnswer:",
+    "no_context_prompt": "Answer the following question: Question: {question}. Answer:",
+    "decoding_strategy": "CAD",
+    "test_coefficients": [0.0, 1.0],
+    "apc": 0,
+    "dola_layers_context": "none",
+    "dola_layers_no_context": "none",
+    "max_tokens": 15,
+    "max_hours": 2.2,
+    "dataset_path": "nq/orig_dev_filtered.json",
+    "output_file": "results/nq_adacad_prompt.json"
+}
