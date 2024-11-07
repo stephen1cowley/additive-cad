@@ -1,2 +1,3 @@
 myenv/*
 src/__pycache__/*
+executables/run_experiment.sh
