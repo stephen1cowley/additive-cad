@@ -10,6 +10,6 @@
     "dola_layers_no_context": "none",
     "max_tokens": 15,
     "max_hours": 2.2,
-    "dataset_path": "nq/orig_dev_filtered.json",
-    "output_file": "results/nq_adacad_prompt.json"
+    "dataset_path": "../nq/orig_dev_filtered.json",
+    "output_file": "../results/nq_adacad_prompt.json"
 }
