@@ -1,6 +1,6 @@
 {
     "llm_name": "4bit/Llama-2-7b-chat-hf",
-    "device": "cuda",
+    "device": "cpu",
     "context_prompt": "{context}\nUsing only the references listed above, answer the following question:\nQuestion: {question}.\nAnswer:",
     "no_context_prompt": "Answer the following question: Question: {question}. Answer:",
     "decoding_strategy": "CAD",
