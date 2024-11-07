@@ -9,12 +9,12 @@ from src.experiment_types import ExperimentConfig
 
 if __name__ == "__main__":
 
-    directory = '/experiment_config'
+    directory = 'experiment_config'
     file_names = os.listdir(directory)
     file_names = [f for f in file_names if os.path.isfile(os.path.join(directory, f))]
 
     # Take the first file in the /experiment_config directory as the config file
-    with open(file_names[0], "r") as f:
+    with open(os.path.join(directory, file_names[0]), "r") as f:
         config_data = json.load(f)
 
     config = ExperimentConfig.from_dict(config_data)
