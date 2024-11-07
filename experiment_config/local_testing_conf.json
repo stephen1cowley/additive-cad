@@ -1,0 +1,15 @@
+{
+    "llm_name": "4bit/Llama-2-7b-chat-hf",
+    "device": "cuda",
+    "context_prompt": "{context}\nUsing only the references listed above, answer the following question:\nQuestion: {question}.\nAnswer:",
+    "no_context_prompt": "Answer the following question: Question: {question}. Answer:",
+    "decoding_strategy": "CAD",
+    "test_coefficients": [-1.0],
+    "apc": 0,
+    "dola_layers_context": "none",
+    "dola_layers_no_context": "none",
+    "max_tokens": 1,
+    "max_hours": 0.5,
+    "dataset_path": "nq/orig_dev_filtered.json",
+    "output_file": "first_output.json"
+}
