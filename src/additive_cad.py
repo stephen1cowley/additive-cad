@@ -232,6 +232,7 @@ class AdditiveCad:
                         f"{idx}. Correct answers:",
                         " ".join([repr(normalize_answer(answers[i])) for i in range(len(answers))])
                     )
+                    sys.stdout.flush()
                 if evaluate_em(response, answers):
                     em_score += 1
                 if evaluate_recall(response, answers):
