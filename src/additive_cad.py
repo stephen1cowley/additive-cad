@@ -240,7 +240,7 @@ class AdditiveCad:
                 # In danger of time elapsing
                 if time.time() - time_0 >= self.config.max_hours * 3600 - 60:
                     print("----------")
-                    print("Out of time for coeff {coeff}")
+                    print(f"Out of time for coeff {coeff}")
                     em_score, recall_score = 0, 0
                     break
 
@@ -250,7 +250,7 @@ class AdditiveCad:
 
             print("----------")
             print(f"Result for coeff {coeff} (eval time {ex_time:.2f} hrs)")
-            print(f"EM score       {em_score}/{len(data)}")
+            print(f"EM score       {em_score} /{len(data)}")
             print(f"Recall score   {recall_score} /{len(data)}")
             print("----------")
             sys.stdout.flush()  # Ensure we log to the .out file
