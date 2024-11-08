@@ -65,27 +65,19 @@ class AdditiveCad:
     ) -> int:
         """
         Take 2 distributions, do contrastive decoding with adaptive plausibility constraint
-        then return the token id with highest logit. Alpha and beta default to literature values.
+        then return the token id with highest logit. Beta defaults to the literature value.
         """
         apc = self.config.apc
-
         good_probs = torch.softmax(good_distribution, dim=-1)
         thresh = apc * float(torch.max(good_probs).item())
-        plausible_ids = (good_probs > thresh).nonzero(as_tuple=True)[-1]
+        implausible_ids = (good_probs < thresh).nonzero(as_tuple=False)
 
-        max_logit = float('-inf')
-        can_id = None
+        # Masking for the APC
+        good_distribution[implausible_ids[:, 0], implausible_ids[:, 1]] = float('-inf')
 
-        # go through all plausible id logits, and find the maximum post-contrasting
-        for i in plausible_ids:
-            i = int(i)
-            logit = (1 + beta) * good_distribution[0, i] - beta * bad_distribution[0, i]
-            if logit > max_logit:
-                max_logit = logit
-                can_id = i
-        if can_id is not None:
-            return can_id
-        return -1
+        # CAD
+        logits = (1 + beta) * good_distribution - beta * bad_distribution
+        return int(torch.argmax(logits).item())
 
     def add_cad_decoding(
         self,
@@ -94,18 +86,15 @@ class AdditiveCad:
         gamma: float = 0.0,
     ) -> int:
         """
-        Take 2 distributions, do contrastive decoding with adaptive plausibility constraint
-        then return the token id with highest logit. Alpha and beta default to literature values.
+        Take 2 distributions, do additive contrastive decoding with adaptive plausibility constraint
+        then return the token id with highest logit. Gamma defaults to 0.0.
         """
         good_probs = torch.softmax(good_distribution, dim=-1)
         bad_probs = torch.softmax(bad_distribution, dim=-1)
 
+        # Additve CAD equation
         new_probs = bad_probs + (good_probs - bad_probs) * (10**gamma)
-        max_index = torch.argmax(new_probs).item()
-
-        if max_index is not None:
-            return int(max_index)
-        return -1
+        return int(torch.argmax(new_probs).item())
 
     def generate_response(
         self,
