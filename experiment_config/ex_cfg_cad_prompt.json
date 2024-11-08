@@ -1,5 +1,5 @@
 {
-    "llm_name": "huggyllama/llama-7b",
+    "llm_name": "huggyllama/llama-13b",
     "device": "cuda",
     "context_prompt": "{context} {question}",
     "no_context_prompt": "{question}",
