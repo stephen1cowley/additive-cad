@@ -9,7 +9,11 @@ from src.experiment_types import ExperimentConfig
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="experiment_config/local_testing_conf.json")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="../experiment_config/local_testing_conf.json"
+    )
     args = parser.parse_args()
 
     # Take the parsed config file location and load the json
