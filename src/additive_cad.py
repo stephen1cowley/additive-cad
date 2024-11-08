@@ -73,11 +73,14 @@ class AdditiveCad:
         implausible_ids = (good_probs < thresh).nonzero(as_tuple=False)
 
         # Masking for the APC
-        good_distribution[implausible_ids[:, 0], implausible_ids[:, 1]] = float('-inf')
+        good_distribution[implausible_ids[:, 0], implausible_ids[:, 1]] = -1000  # Essentially -inf
 
         # CAD
         logits = (1 + beta) * good_distribution - beta * bad_distribution
+        print("apc: ", apc)
+        print("thresh: ", thresh)
         print(implausible_ids)
+        print(implausible_ids.shape)
         print(good_distribution)
         print(good_distribution.shape)
         print(logits)
