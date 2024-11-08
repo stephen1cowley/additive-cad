@@ -178,7 +178,7 @@ class AdditiveCad:
 
     def log_config(self):
         "Print the config contents to stdout and flush"
-        print("----------Begin Experiment----------")
+        print("\n----------Begin Experiment----------")
         for field in fields(self.config):
             value = getattr(self.config, field.name)
             print(f"{field.name} = {value}")
@@ -239,11 +239,20 @@ class AdditiveCad:
                     recall_score += 1
 
                 # In danger of time elapsing
-                if time.time() - time_0 >= self.config.max_hours * 3600 - 60:
+                tot_time = (time.time() - time_0) / 3600
+                if tot_time >= self.config.max_hours - 0.1:
                     print("----------")
-                    print(f"Out of time for coeff {coeff}")
-                    em_score, recall_score = 0, 0
-                    break
+                    print(f"Out of time on question {idx} with coeff {coeff}")
+                    print(f"EM and Recall scores: {em_score} and {recall_score}")
+                    print(f"Total eval time {tot_time:.2f}")
+                    print("Final EM results:", em_results)
+                    print("Final Recall results:", recall_results)
+                    print("----------")
+                    sys.stdout.flush()
+                    return {
+                        'EM': em_results,
+                        'Recall': recall_results,
+                    }
 
             em_results[str(coeff)] = em_score
             recall_results[str(coeff)] = recall_score
