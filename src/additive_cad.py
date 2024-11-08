@@ -103,8 +103,8 @@ class AdditiveCad:
         coeff: float
     ) -> Union[str, None]:
         """
-        Return the generated response given a question and context, based on the settings of the
-        object config.
+        Return the generated response to a question given a question and context, based on the
+        settings of the `AdditiveCad` object config.
 
         Args:
             context (str):
@@ -167,7 +167,7 @@ class AdditiveCad:
 
     def log_config(self):
         "Print the config contents to stdout and flush"
-        print("\n----------Begin Experiment----------")
+        print("\n\n----------Begin Experiment----------")
         for field in fields(self.config):
             value = getattr(self.config, field.name)
             print(f"{field.name} = {value}")
@@ -177,7 +177,7 @@ class AdditiveCad:
         self
     ) -> Dict[Literal['EM', 'Recall'], Dict[str, int]]:
         """
-        Generate a set of results based on the config of the object.
+        Generate a set of results for an entire experiment based on the config of the object.
 
         Returns:
             A dictionary of scores for each coefficient, for EM and Recall metrics.
@@ -233,7 +233,7 @@ class AdditiveCad:
                     print("----------")
                     print(f"Out of time on question {idx} with coeff {coeff}")
                     print(f"EM and Recall scores: {em_score} and {recall_score}")
-                    print(f"Total eval time {tot_time:.2f}")
+                    print(f"Total eval time {tot_time:.2f} hrs")
                     print("Final EM results:", em_results)
                     print("Final Recall results:", recall_results)
                     print("----------")
