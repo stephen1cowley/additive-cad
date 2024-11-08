@@ -5,7 +5,7 @@
     "no_context_prompt": "Answer the following question: Question: {question}. Answer:",
     "decoding_strategy": "CAD",
     "test_coefficients": [0.0, 1.0],
-    "apc": 0,
+    "apc": 0.1,
     "dola_layers_context": "none",
     "dola_layers_no_context": "none",
     "max_tokens": 15,
