@@ -62,12 +62,12 @@ class AdditiveCad:
         bad_distribution: torch.Tensor,
         good_distribution: torch.Tensor,
         beta: float = 1.0,
+        apc: float = 0.1,
     ) -> int:
         """
         Take 2 distributions, do contrastive decoding with adaptive plausibility constraint
         then return the token id with highest logit. Beta defaults to the literature value.
         """
-        apc = self.config.apc
         good_probs = torch.softmax(good_distribution, dim=-1)
         thresh = apc * float(torch.max(good_probs).item())
         implausible_ids = (good_probs < thresh).nonzero(as_tuple=False)
@@ -100,7 +100,8 @@ class AdditiveCad:
         self,
         context: str,
         question: str,
-        coeff: float
+        coeff: float,
+        apc: float = 0.1,
     ) -> Union[str, None]:
         """
         Return the generated response to a question given a question and context, based on the
@@ -115,6 +116,9 @@ class AdditiveCad:
                 file.
             coeff (float):
                 The coefficient required for the configured contrastive decoding type.
+            apc (float):
+                The adaptive plausibility constraint value, defaults to 0.1. Only relevant for
+                regular CAD.
 
         Returns:
             The LLM's response to a question. Returns `str` type if successful, or `None` if an
@@ -140,6 +144,7 @@ class AdditiveCad:
                         bad_distribution=bad_distribution,
                         good_distribution=good_distribution,
                         beta=coeff,
+                        apc=apc,
                     )
                 elif self.config.decoding_strategy == 'additive-CAD':
                     next_token_id = self.add_cad_decoding(
@@ -207,7 +212,8 @@ class AdditiveCad:
                 response = self.generate_response(
                     context=context,
                     question=question,
-                    coeff=coeff
+                    coeff=coeff,
+                    apc=self.config.apc
                 )
 
                 if response is None:  # Error with CAD generation
