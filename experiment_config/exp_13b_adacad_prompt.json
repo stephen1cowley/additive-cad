@@ -9,7 +9,7 @@
     "dola_layers_context": "none",
     "dola_layers_no_context": "none",
     "max_tokens": 15,
-    "max_hours": 2.2,
+    "max_hours": 3.0,
     "dataset_path": "../nq/orig_dev_filtered.json",
     "output_file": "../results/exp_13b_adacad_prompt.json"
 }
