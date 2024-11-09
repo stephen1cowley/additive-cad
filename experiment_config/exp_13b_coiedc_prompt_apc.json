@@ -1,0 +1,15 @@
+{
+    "llm_name": "huggyllama/llama-13b",
+    "device": "cuda",
+    "context_prompt": "Given the following information:{context}\nAnswer the following question based on the given information with one or few words: {question}\nAnswer:",
+    "no_context_prompt": "Answer the following question based on your internal knowledge with one or few words: {question}\nAnswer:",
+    "decoding_strategy": "CAD",
+    "test_coefficients": [0.0, 1.0],
+    "apc": 0.1,
+    "dola_layers_context": "none",
+    "dola_layers_no_context": "none",
+    "max_tokens": 15,
+    "max_hours": 3.0,
+    "dataset_path": "../nq/orig_dev_filtered.json",
+    "output_file": "../results/exp_13b_coiedc_prompt_apc.json"
+}

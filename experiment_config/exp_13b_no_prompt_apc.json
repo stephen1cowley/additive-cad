@@ -1,0 +1,15 @@
+{
+    "llm_name": "huggyllama/llama-13b",
+    "device": "cuda",
+    "context_prompt": "{context} {question}",
+    "no_context_prompt": "{question}",
+    "decoding_strategy": "CAD",
+    "test_coefficients": [0.0, 1.0],
+    "apc": 0.1,
+    "dola_layers_context": "none",
+    "dola_layers_no_context": "none",
+    "max_tokens": 15,
+    "max_hours": 3.0,
+    "dataset_path": "../nq/orig_dev_filtered.json",
+    "output_file": "../results/exp_13b_no_prompt_apc.json"
+}
