@@ -77,16 +77,6 @@ class AdditiveCad:
 
         # CAD
         logits = (1 + beta) * good_distribution - beta * bad_distribution
-        print("apc: ", apc)
-        print("thresh: ", thresh)
-        print(implausible_ids)
-        print(implausible_ids.shape)
-        print(good_distribution)
-        print(good_distribution.shape)
-        print(logits)
-        print(logits.shape)
-        print(torch.argmax(logits).item())
-        print(int(torch.argmax(logits).item()))
         return int(torch.argmax(logits).item())
 
     def add_cad_decoding(
@@ -171,8 +161,6 @@ class AdditiveCad:
                     self.tokenizer.encode(output) + [next_token_id],
                     skip_special_tokens=True
                 )
-
-                print(output)
 
                 # stopping_symbols = [".", "\n"]
                 # for stopping_symbol in stopping_symbols:
