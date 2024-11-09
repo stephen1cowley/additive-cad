@@ -74,6 +74,11 @@ class AdditiveCad:
 
         # Masking for the APC
         good_distribution[implausible_ids[:, 0], implausible_ids[:, 1]] = -1000  # Essentially -inf
+        bad_distribution = torch.where(
+            bad_distribution == float('-inf'),
+            torch.tensor(-1000.0),
+            good_distribution
+        )
 
         # CAD
         logits = (1 + beta) * good_distribution - beta * bad_distribution
