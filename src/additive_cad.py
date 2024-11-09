@@ -77,7 +77,7 @@ class AdditiveCad:
         bad_distribution = torch.where(
             bad_distribution == float('-inf'),
             torch.tensor(-1000.0),
-            good_distribution
+            bad_distribution
         )
 
         # CAD
@@ -161,6 +161,9 @@ class AdditiveCad:
                     return None
                 if next_token_id == -1:
                     raise TypeError("cad_decoding failed to return correct id")
+                if next_token_id == 2:
+                    # EOS has been reached
+                    return output
 
                 output = self.tokenizer.decode(
                     self.tokenizer.encode(output) + [next_token_id],
