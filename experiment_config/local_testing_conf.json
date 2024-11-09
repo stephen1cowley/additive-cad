@@ -8,7 +8,7 @@
     "apc": 0.1,
     "dola_layers_context": "none",
     "dola_layers_no_context": "none",
-    "max_tokens": 1,
+    "max_tokens": 3,
     "max_hours": 0.1,
     "dataset_path": "../nq/orig_dev_filtered.json",
     "output_file": "../results/first_output.json"
