@@ -28,6 +28,7 @@ class AdditiveCad:
             torch_dtype=torch.float16,
             device_map='auto',
         )
+        print("EOS", self.tokenizer.encode(self.tokenizer.eos_token))
 
     def generate_distribution(
         self,
@@ -161,7 +162,7 @@ class AdditiveCad:
                     return None
                 if next_token_id == -1:
                     raise TypeError("cad_decoding failed to return correct id")
-                if next_token_id == 2:
+                if next_token_id == self.tokenizer.eos_token_id:
                     # EOS has been reached
                     return output
 
