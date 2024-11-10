@@ -167,7 +167,7 @@ class AdditiveCad:
 
                 output = self.tokenizer.decode(
                     self.tokenizer.encode(output) + [next_token_id],
-                    skip_special_tokens=True
+                    skip_special_tokens=False
                 )
 
                 # stopping_symbols = [".", "\n"]
