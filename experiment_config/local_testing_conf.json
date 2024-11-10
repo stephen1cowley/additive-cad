@@ -1,5 +1,5 @@
 {
-    "llm_name": "meta-llama/Llama-2-13b-chat-hf",
+    "llm_name": "4bit/Llama-2-7b-chat-hf",
     "device": "cuda",
     "context_prompt": "{context}\nUsing only the references listed above, answer the following question:\nQuestion: {question}.\nAnswer:",
     "no_context_prompt": "Answer the following question: Question: {question}. Answer:",
