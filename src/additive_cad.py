@@ -28,7 +28,6 @@ class AdditiveCad:
             torch_dtype=torch.float16,
             device_map='auto',
         )
-        print("EOS", self.tokenizer.encode(self.tokenizer.eos_token))
 
     def generate_distribution(
         self,
