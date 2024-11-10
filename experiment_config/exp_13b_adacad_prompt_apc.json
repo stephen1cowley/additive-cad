@@ -1,5 +1,5 @@
 {
-    "llm_name": "huggyllama/llama-13b",
+    "llm_name": "NousResearch/Llama-2-13b-chat-hf",
     "device": "cuda",
     "context_prompt": "{context}\nUsing only the references listed above, answer the following question:\nQuestion: {question}.\nAnswer:",
     "no_context_prompt": "Answer the following question: Question: {question}. Answer:",

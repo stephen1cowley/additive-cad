@@ -1,5 +1,5 @@
 {
-    "llm_name": "huggyllama/llama-13b",
+    "llm_name": "NousResearch/Llama-2-13b-chat-hf",
     "device": "cuda",
     "context_prompt": "Instruction: read the given information and answer the corresponding question.\n\n{context}\nQ: {question}\nA:",
     "no_context_prompt": "Instruction: answer the corresponding question.\n\nQ:{question}\nA:",
