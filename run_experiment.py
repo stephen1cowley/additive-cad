@@ -1,5 +1,6 @@
 """
-The run_experiment module: uses the config file to run the experiment.
+The run_experiment module: uses the json config file (see src/experiment_types for the schema) to
+run the experiment.
 """
 
 import json
@@ -12,7 +13,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--config",
         type=str,
-        default="../experiment_config/local_testing_conf.json"
+        default="../experiment_config/local_testing_conf.json",
+        help="""
+        Path to the json config file. For the schema see /src/experiment_types For examples see 
+        /experiment_config/.
+        """
     )
     args = parser.parse_args()
 
@@ -20,7 +25,7 @@ if __name__ == "__main__":
     with open(args.config, "r") as f:
         config_data = json.load(f)
 
-    config = ExperimentConfig.from_dict(config_data)
+    config = ExperimentConfig.from_dict(config_data)  # unmarshall
     model = AdditiveCad(config)
 
     # Run the experiment
