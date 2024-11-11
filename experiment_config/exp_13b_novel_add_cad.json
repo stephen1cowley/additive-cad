@@ -1,8 +1,8 @@
 {
     "llm_name": "huggyllama/llama-13b",
     "device": "cuda",
-    "context_prompt": "{context}\nUsing only the references listed above, answer the following question:\nQuestion: {question}.\nAnswer:",
-    "no_context_prompt": "Answer the following question: Question: {question}. Answer:",
+    "context_prompt": "Given the following information:{context}\nAnswer the following question based on the given information with one or few words: {question}\nAnswer:",
+    "no_context_prompt": "Answer the following question based on your internal knowledge with one or few words: {question}\nAnswer:",
     "decoding_strategy": "additive-CAD",
     "test_coefficients": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1.0],
     "apc": 0.1,

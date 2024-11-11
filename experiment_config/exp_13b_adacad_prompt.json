@@ -4,7 +4,7 @@
     "context_prompt": "{context}\nUsing only the references listed above, answer the following question:\nQuestion: {question}.\nAnswer:",
     "no_context_prompt": "Answer the following question: Question: {question}. Answer:",
     "decoding_strategy": "CAD",
-    "test_coefficients": [0.0, 1.0],
+    "test_coefficients": [1.0],
     "apc": 0.0,
     "dola_layers_context": "none",
     "dola_layers_no_context": "none",
