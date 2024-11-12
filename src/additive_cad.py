@@ -101,6 +101,7 @@ class AdditiveCad:
         scale = 10 ** 3
         topk_values = torch.round(topk_values * scale) / scale
         print(topk_values)
+        sys.stdout.flush()
 
         # Additve CAD equation
         new_probs = bad_probs + (good_probs - bad_probs) * (10**gamma)
