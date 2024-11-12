@@ -8,8 +8,8 @@
     "apc": 0.1,
     "dola_layers_context": "none",
     "dola_layers_no_context": "none",
-    "max_tokens": 15,
-    "max_hours": 12.0,
+    "max_tokens": 1,
+    "max_hours": 0.3,
     "dataset_path": "../nq/orig_dev_filtered.json",
     "output_file": "../results/exp_13b_novel_chat_add_cad.json"
 }
