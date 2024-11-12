@@ -9,7 +9,7 @@
     "dola_layers_context": "none",
     "dola_layers_no_context": "none",
     "max_tokens": 1,
-    "max_hours": 0.3,
+    "max_hours": 0.1,
     "dataset_path": "../nq/orig_dev_filtered.json",
     "output_file": "../results/exp_13b_novel_add_cad.json"
 }

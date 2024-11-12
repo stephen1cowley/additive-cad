@@ -97,7 +97,7 @@ class AdditiveCad:
         good_probs = torch.softmax(good_distribution, dim=-1)
         bad_probs = torch.softmax(bad_distribution, dim=-1)
 
-        topk_values, _ = torch.topk(good_probs, 20)
+        topk_values, _ = torch.topk(good_distribution, 20)
         scale = 10 ** 3
         topk_values = torch.round(topk_values * scale) / scale
         print(topk_values)
