@@ -1,5 +1,5 @@
 {
-    "llm_name": "daryl149/llama-2-13b-chat-hf",
+    "llm_name": "meta-llama/Llama-2-7b-chat-hf",
     "device": "cuda",
     "context_prompt": "Given the following information:{context}\nAnswer the following question based on the given information with one or few words: {question}\nAnswer:",
     "no_context_prompt": "Answer the following question based on your internal knowledge with one or few words: {question}\nAnswer:",
