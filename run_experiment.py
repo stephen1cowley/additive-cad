@@ -15,7 +15,7 @@ if __name__ == "__main__":
         type=str,
         default="../experiment_config/local_testing_conf.json",
         help="""
-        Path to the json config file. For the schema see /src/experiment_types For examples see 
+        Path to the json config file. For the schema see /src/experiment_types For examples see
         /experiment_config/.
         """
     )
