@@ -1,0 +1,15 @@
+{
+    "llm_name": "huggyllama/llama-13b",
+    "device": "cuda",
+    "context_prompt": "{context}\nUsing only the references listed above, answer the following question:\nQuestion: {question}.\nAnswer:",
+    "no_context_prompt": "Answer the following question: Question: {question}. Answer:",
+    "decoding_strategy": "CAD",
+    "test_coefficients": [-1.0, 0.0, 1.0, 2.0, 3.0, 4.0],
+    "apc": 0.1,
+    "dola_layers_context": "none",
+    "dola_layers_no_context": "none",
+    "max_tokens": 14,
+    "max_hours": 12.0,
+    "dataset_path": "../nq/nqswap.json",
+    "output_file": "../results/exp_nqswap.json"
+}
