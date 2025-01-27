@@ -1,0 +1,10 @@
+[
+    "{context}\nUsing only the references listed above, answer the following question:\nQuestion: {question}.\nAnswer:",
+    "Answer the following question: Question: {question}. Answer:",
+    "Given the following information:{context}\nAnswer the following question based on the given information with one or few words: {question}\nAnswer:",
+    "Answer the following question based on your internal knowledge with one or few words: {question}\nAnswer:",
+    "Instruction: read the given information and answer the corresponding question.\n\n{context}\nQ: {question}\nA:",
+    "Instruction: answer the corresponding question.\n\nQ:{question}\nA:",
+    "{context} {question}",
+    "{question}"
+]

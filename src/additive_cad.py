@@ -229,7 +229,7 @@ class AdditiveCad:
                     print(f"{idx}. CAD answer: {repr(response)}")
                     print(
                         f"{idx}. Correct answers:",
-                        " ".join([repr(normalize_answer(answers[i])) for i in range(len(answers))])
+                        " ".join([repr(normalize_answer(answers[i])) for i in range(len(answers))]) #ds
                     )
                     sys.stdout.flush()
                 if evaluate_em(response, answers):
