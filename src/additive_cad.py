@@ -11,7 +11,7 @@ import torch
 from transformers import LlamaForCausalLM, LlamaTokenizer, PreTrainedTokenizer, PreTrainedModel
 from transformers.generation.utils import ModelOutput
 from src.experiment_types import ExperimentConfig
-from src.utils import normalize_answer, evaluate_recall, evaluate_em
+from src.utils import normalize_answer, evaluate_substringmatch, evaluate_em
 from dataclasses import fields
 
 
@@ -187,13 +187,13 @@ class AdditiveCad:
 
     def generate_results(
         self
-    ) -> Dict[Literal['EM', 'Recall'], Dict[str, int]]:
+    ) -> Dict[Literal['EM', 'substringmatch'], Dict[str, int]]:
         """
         Generate a set of results for an entire experiment based on the config of the object.
 
         Returns:
-            A dictionary of scores for each coefficient, for EM and Recall metrics.
-            Example: `{'EM': {'0.0': 167, '1.0': 193}, 'Recall': {'0.0': 267, '1.0': 293}}`
+            A dictionary of scores for each coefficient, for EM and substringmatch metrics.
+            Example: `{'EM': {'0.0': 167, '1.0': 193}, 'substringmatch': {'0.0': 267, '1.0': 293}}`
         """
 
         self.log_config()
@@ -203,13 +203,13 @@ class AdditiveCad:
 
         time_0 = time.time()
         em_results: Dict[str, int] = {}
-        recall_results: Dict[str, int] = {}
+        substringmatch_results: Dict[str, int] = {}
 
         # Loop through every test coefficient for the experiment
         for coeff in self.config.test_coefficients:
             time_1 = time.time()
             em_score: int = 0
-            recall_score: int = 0
+            substringmatch_score: int = 0
             # Loop through each question
             for idx, qa in enumerate(data):
                 context: str = qa["context"]
@@ -237,40 +237,40 @@ class AdditiveCad:
                     sys.stdout.flush()
                 if evaluate_em(response, answers):
                     em_score += 1
-                if evaluate_recall(response, answers):
-                    recall_score += 1
+                if evaluate_substringmatch(response, answers):
+                    substringmatch_score += 1
 
                 # In danger of time elapsing
                 tot_time = (time.time() - time_0) / 3600
                 if tot_time >= self.config.max_hours - 0.1:
                     print("----------")
                     print(f"Out of time on question {idx} with coeff {coeff}")
-                    print(f"EM and Recall scores: {em_score} and {recall_score}")
+                    print(f"EM and substringmatch scores: {em_score} and {substringmatch_score}")
                     print(f"Total eval time {tot_time:.2f} hrs")
                     print("Final EM results:", em_results)
-                    print("Final Recall results:", recall_results)
+                    print("Final substringmatch results:", substringmatch_results)
                     print("----------")
                     sys.stdout.flush()
                     return {
                         'EM': em_results,
-                        'Recall': recall_results,
+                        'substringmatch': substringmatch_results,
                     }
 
             em_results[str(coeff)] = em_score
-            recall_results[str(coeff)] = recall_score
+            substringmatch_results[str(coeff)] = substringmatch_score
             ex_time = (time.time() - time_1) / 3600
 
             print("----------")
             print(f"Result for coeff {coeff} (eval time {ex_time:.2f} hrs)")
             print(f"EM score       {em_score} /{len(data)}")
-            print(f"Recall score   {recall_score} /{len(data)}")
+            print(f"Substring match score   {substringmatch_score} /{len(data)}")
             print("----------")
             sys.stdout.flush()  # Ensure we log to the .out file
 
         print("Final EM results:", em_results)
-        print("Final Recall results:", recall_results)
+        print("Final substringmatch results:", substringmatch_results)
         sys.stdout.flush()
         return {
             'EM': em_results,
-            'Recall': recall_results,
+            'substringmatch': substringmatch_results,
         }

@@ -38,7 +38,7 @@ def evaluate_em(
     return False
 
 
-def evaluate_recall(
+def evaluate_substringmatch(
     prediction: str,
     answers: List[str],
 ) -> bool:
