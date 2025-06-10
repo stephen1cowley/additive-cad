@@ -29,4 +29,4 @@ Then run
 ```
 python run_experiment.py --config path/to/config.json
 ```
-See `src/experiment_types.py` for the required schema, which defines the hyperparameters of the desired experiment e.g. what dataset, what CAD/Additive CAD coefficients to use etc.
+See `src/experiment_types.py` for the required schema, which defines the hyperparameters of the desired experiment e.g. what dataset, what CAD/Additive CAD coefficients to use etc. Examples are provided in `experiment_config/`.
