@@ -6,11 +6,11 @@ Additive CAD is a variant of Context-Aware Decoding (CAD) which adds the differe
 
 Regular CAD:
 
-<img src="https://github.com/user-attachments/assets/1ce39ba1-aac1-4ea5-823d-3f4b81fb3b38" style="width: 40%; height: auto;" alt="Screenshot 2025-05-28 114406">
+<img src="https://github.com/user-attachments/assets/1ce39ba1-aac1-4ea5-823d-3f4b81fb3b38" style="width: 30%; height: auto;" alt="Screenshot 2025-05-28 114406">
 
 Additive CAD:
 
-<img src="https://github.com/user-attachments/assets/a5fcf981-9280-4861-b014-8edba90a1071" style="width: 40%; height: auto;" alt="Screenshot 2025-05-28 142308">
+<img src="https://github.com/user-attachments/assets/a5fcf981-9280-4861-b014-8edba90a1071" style="width: 30%; height: auto;" alt="Screenshot 2025-05-28 142308">
 
 
 Our research also investigates the effect of incorporating the Decoding by Contrasting Layers (DoLa) method into the CAD inputs. We also explore the effect of prompt on CAD to address some of the inconsistent results seen across different papers when it comes to CAD performance on the Natural Questions dataset.
