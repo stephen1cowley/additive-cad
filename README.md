@@ -15,7 +15,7 @@ Additive CAD:
 <img src="https://github.com/user-attachments/assets/a5fcf981-9280-4861-b014-8edba90a1071" style="width: 30%; height: auto;" alt="Screenshot 2025-05-28 142308">
 
 
-Our research also investigates the effect of incorporating the Decoding by Contrasting Layers (DoLa) method into the CAD inputs. We also explore the effect of prompt on CAD to address some of the inconsistent results seen across different papers when it comes to CAD performance on the Natural Questions dataset.
+Our research also investigates the effect of incorporating the Decoding by Contrasting Layers (DoLa) method into the CAD inputs. We also explore the effect of prompt on CAD to address some of the inconsistent results seen across different papers when it comes to performance on the Natural Questions dataset.
 
 ## Evaluation code
 This code runs evaluations of CAD or Additive CAD on any json-format question-answer benchmark. This might be useful for in trying to replicate some of the latter results achieved by the research, but note that the majority of the main results were run on different code, provided [here](https://github.com/stephen1cowley/memotrap-testing) for academic purposes.
