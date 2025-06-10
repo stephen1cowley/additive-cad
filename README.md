@@ -18,7 +18,7 @@ Additive CAD:
 Our research also investigates the effect of incorporating the Decoding by Contrasting Layers (DoLa) method into the CAD inputs. We also explore the effect of varying the input prompts on CAD to address some of the inconsistent results seen across different papers when it comes to performance on the Natural Questions dataset.
 
 ## Evaluation code
-This code runs evaluations of CAD or Additive CAD on any json-format question-answer benchmark. This might be useful for replicating some of the latter results shown in the research paper, but note that the majority of the main results were evaluated on different scripts, provided [here](https://github.com/stephen1cowley/memotrap-testing) for academic purposes.
+The evaluation scripts in this repository can evaluate either CAD or Additive CAD on any json-format question-answer benchmark (json files for MemoTrap and Natural Questions are provided here). This might be useful for replicating some of the later results shown in the research paper, but note that the majority of the main results were evaluated on different scripts, provided [here](https://github.com/stephen1cowley/memotrap-testing) for academic purposes.
 
 ### To run
 You will first need to install torch from the official website. Then:
@@ -29,4 +29,4 @@ Then run
 ```
 python run_experiment.py --config path/to/config.json
 ```
-See `src/experiment_types.py` for the required schema.
+See `src/experiment_types.py` for the required schema, which defines the hyperparameters of the desired experiment e.g. dataset, what CAD/Additive CAD coefficients to use etc.
