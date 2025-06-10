@@ -21,7 +21,7 @@ Our research also investigates the effect of incorporating the Decoding by Contr
 The evaluation scripts in this repository can evaluate either CAD or Additive CAD on any json-format question-answer benchmark (json files for MemoTrap and Natural Questions are provided here). This might be useful for replicating some of the later results shown in the research paper, but note that the majority of the main results were evaluated on different scripts, provided [here](https://github.com/stephen1cowley/memotrap-testing) for academic purposes.
 
 ### To run
-You will first need to install torch from the official website. Then:
+First install PyTorch from the official website. Then:
 ```
 pip install numpy pandas transformers protobuf sentencepiece
 ```
@@ -29,4 +29,4 @@ Then run
 ```
 python run_experiment.py --config path/to/config.json
 ```
-See `src/experiment_types.py` for the required schema, which defines the hyperparameters of the desired experiment e.g. dataset, what CAD/Additive CAD coefficients to use etc.
+See `src/experiment_types.py` for the required schema, which defines the hyperparameters of the desired experiment e.g. what dataset, what CAD/Additive CAD coefficients to use etc.
