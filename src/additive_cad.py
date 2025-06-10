@@ -166,6 +166,9 @@ class AdditiveCad:
                     return output
 
                 # Concat the new token to the end
+                # NOTE: the following is a non-standard way of decoding (we decode/encode a running string)
+                # This is less efficient than keeping everything as tokens, but is more intuitive
+                # This approach was kept constant across all experiments
                 output = self.tokenizer.decode(
                     self.tokenizer.encode(output) + [next_token_id],
                     skip_special_tokens=True

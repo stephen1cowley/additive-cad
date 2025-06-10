@@ -42,7 +42,7 @@ def evaluate_recall(
     prediction: str,
     answers: List[str],
 ) -> bool:
-    "Recall metric (not exact match) given a list of correct answers"
+    "Substring match score given a list of correct answers"
     norm_prediction = normalize_answer(prediction)
     norm_answers = [normalize_answer(ans) for ans in answers]
 
