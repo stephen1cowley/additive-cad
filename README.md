@@ -1,10 +1,10 @@
 # Additive CAD
 
-*As part of MEng project "Mitigating Hallucinations in LLMs", supervised by Dr Marcus Tomalin*
+*As part of MEng project "Mitigating Hallucinations in LLMs"*
 
 **arXiv paper:** (link coming soon)
 
-Additive CAD is a proposed variant of Context-Aware Decoding (CAD) which adds the difference in probability distributions with and without context, as opposed to multiplying by their ratio. We achieve significant improvements on knowledge-conflict tasks (between prior LLM belief and provided contextual information) on the MemoTrap dataset, as shown below. Our research paper introduces a visual intuition for why Additive CAD is superior to regular CAD on specific knowledge-conflict examples.
+Additive CAD is a proposed variant of Context-Aware Decoding (CAD) (see https://arxiv.org/abs/2305.14739) which adds the difference in probability distributions with and without context, as opposed to multiplying by their ratio. We achieve significant improvements on knowledge-conflict tasks (between prior LLM belief and provided contextual information) on the MemoTrap dataset, as shown below. Our research paper introduces a visual intuition for why Additive CAD is superior to regular CAD on specific knowledge-conflict examples.
 
 Regular CAD:
 
